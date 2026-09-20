@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0b0b0f">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Advanced offline link to QR code generator">
+    <title>Link2QR | Advanced QR Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="app">
+
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="brand-info">
+                    <h1>Link2QR</h1>
+                    <p>Advanced QR Generator</p>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <button
+                    type="button"
+                    class="icon-button"
+                    id="historyButton"
+                    aria-label="Open QR history"
+                    title="History">
+                    <span class="icon">↶</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="icon-button"
+                    id="themeButton"
+                    aria-label="Toggle theme"
+                    title="Toggle theme">
+                    <span class="icon" id="themeIcon">◐</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-container">
+
+            <section class="hero-section">
+                <div class="hero-badge">
+                    <span class="status-dot"></span>
+                    <span>Offline Ready</span>
+                </div>
+
+                <h2>Turn any link into a QR code.</h2>
+
+                <p>
+                    Create, customize, preview and export high quality QR codes
+                    directly in your browser.
+                </p>
+            </section>
+
+            <section class="workspace">
+
+                <div class="control-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <span class="section-label">INPUT</span>
+                            <h3>Enter your link</h3>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="clear-button"
+                            id="clearButton"
+                            aria-label="Clear link">
+                            Clear
+                        </button>
+                    </div>
+
+                    <div class="url-field-wrapper">
+
+                        <div class="url-icon" aria-hidden="true">
+                            ↗
+                        </div>
+
+                        <input
+                            type="url"
+                            id="urlInput"
+                            class="url-input"
+                            inputmode="url"
+                            autocomplete="off"
+                            autocapitalize="off"
+                            spellcheck="false"
+                            placeholder="https://example.com"
+                            aria-label="Enter URL">
+
+                        <button
+                            type="button"
+                            id="pasteButton"
+                            class="paste-button"
+                            aria-label="Paste URL">
+                            Paste
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="urlValidation"
+                        class="validation-message"
+                        role="status"
+                        aria-live="polite">
+                    </div>
+
+                    <div class="quick-links">
+                        <button type="button" class="quick-link" data-example="https://google.com">
+                            Google
+                        </button>
+
+                        <button type="button" class="quick-link" data-example="https://github.com">
+                            GitHub
+                        </button>
+
+                        <button type="button" class="quick-link" data-example="https://youtube.com">
+                            YouTube
+                        </button>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="settings-section">
+
+                        <div class="settings-title-row">
+                            <div>
+                                <span class="section-label">CUSTOMIZE</span>
+                                <h3>QR appearance</h3>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="reset-button"
+                                id="resetSettingsButton">
+                                Reset
+                            </button>
+                        </div>
+
+                        <div class="settings-grid">
+
+                            <div class="setting-group full-width">
+                                <label for="foregroundColor">
+                                    <span>Foreground</span>
+                                    <span id="foregroundValue">#000000</span>
+                                </label>
+
+                                <div class="color-control">
+                                    <input
+                                        type="color"
+                                        id="foregroundColor"
+                                        value="#000000"
+                                        aria-label="QR foreground color">
+
+                                    <input
+                                        type="text"
+                                        id="foregroundHex"
+                                        value="#000000"
+                                        maxlength="7"
+                                        spellcheck="false"
+                                        aria-label="Foreground hex color">
+                                </div>
+                            </div>
+
+                            <div class="setting-group full-width">
+                                <label for="backgroundColor">
+                                    <span>Background</span>
+                                    <span id="backgroundValue">#FFFFFF</span>
+                                </label>
+
+                                <div class="color-control">
+                                    <input
+                                        type="color"
+                                        id="backgroundColor"
+                                        value="#ffffff"
+                                        aria-label="QR background color">
+
+                                    <input
+                                        type="text"
+                                        id="backgroundHex"
+                                        value="#FFFFFF"
+                                        maxlength="7"
+                                        spellcheck="false"
+                                        aria-label="Background hex color">
+                                </div>
+                            </div>
+
+                            <div class="setting-group">
+                                <label for="qrSize">
+                                    <span>Size</span>
+                                    <span id="qrSizeValue">512 px</span>
+                                </label>
+
+                                <input
+                                    type="range"
+                                    id="qrSize"
+                                    min="128"
+                                    max="2048"
+                                    value="512"
+                                    step="32">
+                            </div>
+
+                            <div class="setting-group">
+                                <label for="quietZone">
+                                    <span>Margin</span>
+                                    <span id="quietZoneValue">4</span>
+                                </label>
+
+                                <input
+                                    type="range"
+                                    id="quietZone"
+                                    min="0"
+                                    max="16"
+                                    value="4"
+                                    step="1">
+                            </div>
+
+                            <div class="setting-group full-width">
+                                <label for="errorCorrection">
+                                    <span>Error correction</span>
+                                </label>
+
+                                <select id="errorCorrection">
+                                    <option value="L">Low · 7%</option>
+                                    <option value="M" selected>Medium · 15%</option>
+                                    <option value="Q">Quartile · 25%</option>
+                                    <option value="H">High · 30%</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="advanced-section">
+
+                        <button
+                            type="button"
+                            class="advanced-toggle"
+                            id="advancedToggle"
+                            aria-expanded="false"
+                            aria-controls="advancedOptions">
+
+                            <span>
+                                <span class="advanced-icon">⚙</span>
+                                Advanced options
+                            </span>
+
+                            <span
+                                class="toggle-arrow"
+                                id="advancedArrow">
+                                ›
+                            </span>
+                        </button>
+
+                        <div
+                            class="advanced-options"
+                            id="advancedOptions"
+                            hidden>
+
+                            <div class="advanced-grid">
+
+                                <div class="setting-group">
+                                    <label for="dotStyle">
+                                        <span>Dot style</span>
+                                    </label>
+
+                                    <select id="dotStyle">
+                                        <option value="square" selected>Square</option>
+                                        <option value="rounded">Rounded</option>
+                                        <option value="dots">Dots</option>
+                                        <option value="classy">Classy</option>
+                                        <option value="classy-rounded">Classy Rounded</option>
+                                    </select>
+                                </div>
+
+                                <div class="setting-group">
+                                    <label for="cornerStyle">
+                                        <span>Corner style</span>
+                                    </label>
+
+                                    <select id="cornerStyle">
+                                        <option value="square" selected>Square</option>
+                                        <option value="dot">Dot</option>
+                                        <option value="extra-rounded">Extra rounded</option>
+                                    </select>
+                                </div>
+
+                                <div class="setting-group">
+                                    <label for="cornerEyeStyle">
+                                        <span>Corner eye</span>
+                                    </label>
+
+                                    <select id="cornerEyeStyle">
+                                        <option value="square" selected>Square</option>
+                                        <option value="dot">Dot</option>
+                                    </select>
+                                </div>
+
+                                <div class="setting-group">
+                                    <label for="rotation">
+                                        <span>Rotation</span>
+                                        <span id="rotationValue">0°</span>
+                                    </label>
+
+                                    <input
+                                        type="range"
+                                        id="rotation"
+                                        min="0"
+                                        max="359"
+                                        value="0"
+                                        step="1">
+                                </div>
+
+                                <div class="setting-group full-width">
+                                    <label for="logoInput">
+                                        <span>Center logo</span>
+                                    </label>
+
+                                    <div class="file-input-wrapper">
+                                        <input
+                                            type="file"
+                                            id="logoInput"
+                                            accept="image/png,image/jpeg,image/webp,image/svg+xml">
+
+                                        <label
+                                            for="logoInput"
+                                            class="file-input-label">
+                                            <span>Choose image</span>
+                                            <span id="logoFileName">No file selected</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="setting-group">
+                                    <label for="logoSize">
+                                        <span>Logo size</span>
+                                        <span id="logoSizeValue">20%</span>
+                                    </label>
+
+                                    <input
+                                        type="range"
+                                        id="logoSize"
+                                        min="5"
+                                        max="40"
+                                        value="20"
+                                        step="1">
+                                </div>
+
+                                <div class="setting-group">
+                                    <label for="logoMargin">
+                                        <span>Logo margin</span>
+                                        <span id="logoMarginValue">4</span>
+                                    </label>
+
+                                    <input
+                                        type="range"
+                                        id="logoMargin"
+                                        min="0"
+                                        max="20"
+                                        value="4"
+                                        step="1">
+                                </div>
+
+                                <div class="setting-group full-width checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            id="transparentBackground">
+
+                                        <span class="custom-checkbox"></span>
+
+                                        <span>
+                                            Transparent background
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="setting-group full-width checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            id="includeMargin"
+                                            checked>
+
+                                        <span class="custom-checkbox"></span>
+
+                                        <span>
+                                            Include quiet zone
+                                        </span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="preview-panel">
+
+                    <div class="preview-header">
+
+                        <div>
+                            <span class="section-label">PREVIEW</span>
+                            <h3>Your QR code</h3>
+                        </div>
+
+                        <div class="live-indicator">
+                            <span></span>
+                            Live
+                        </div>
+
+                    </div>
+
+                    <div class="qr-stage" id="qrStage">
+
+                        <div class="qr-placeholder" id="qrPlaceholder">
+
+                            <div class="placeholder-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <h4>Your QR code will appear here</h4>
+
+                            <p>
+                                Enter a URL to generate your code
+                            </p>
+
+                        </div>
+
+                        <div
+                            class="qr-output"
+                            id="qrOutput"
+                            hidden>
+
+                            <div
+                                class="qr-canvas-wrapper"
+                                id="qrCanvasWrapper">
+                            </div>
+
+                            <div
+                                class="qr-loading"
+                                id="qrLoading"
+                                hidden>
+                                <div class="loading-spinner"></div>
+                                <span>Generating...</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="preview-meta">
+
+                        <div class="meta-item">
+                            <span class="meta-label">FORMAT</span>
+                            <span class="meta-value" id="formatValue">PNG</span>
+                        </div>
+
+                        <div class="meta-item">
+                            <span class="meta-label">SIZE</span>
+                            <span class="meta-value" id="metaSizeValue">512 × 512</span>
+                        </div>
+
+                        <div class="meta-item">
+                            <span class="meta-label">ERROR</span>
+                            <span class="meta-value" id="metaErrorValue">15%</span>
+                        </div>
+
+                    </div>
+
+                    <div class="download-section">
+
+                        <div class="format-selector">
+
+                            <button
+                                type="button"
+                                class="format-button active"
+                                data-format="png">
+                                PNG
+                            </button>
+
+                            <button
+                                type="button"
+                                class="format-button"
+                                data-format="svg">
+                                SVG
+                            </button>
+
+                            <button
+                                type="button"
+                                class="format-button"
+                                data-format="jpeg">
+                                JPEG
+                            </button>
+
+                            <button
+                                type="button"
+                                class="format-button"
+                                data-format="webp">
+                                WEBP
+                            </button>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="primary-action"
+                            id="downloadButton"
+                            disabled>
+
+                            <span class="button-icon">↓</span>
+
+                            <span>
+                                Download QR
+                            </span>
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="secondary-action"
+                            id="copyButton"
+                            disabled>
+
+                            <span class="button-icon">□</span>
+
+                            <span>
+                                Copy QR to clipboard
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="information-section">
+
+                <div class="info-card">
+                    <div class="info-icon">⚡</div>
+                    <div>
+                        <h4>Instant generation</h4>
+                        <p>
+                            Your QR code updates automatically as you customize it.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">◉</div>
+                    <div>
+                        <h4>Privacy first</h4>
+                        <p>
+                            Your URL stays inside your browser while generating the code.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">↯</div>
+                    <div>
+                        <h4>High resolution</h4>
+                        <p>
+                            Export large QR codes suitable for digital and print use.
+                        </p>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="history-panel" id="historyPanel" hidden>
+
+                <div class="history-header">
+
+                    <div>
+                        <span class="section-label">LOCAL STORAGE</span>
+                        <h3>QR history</h3>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="clear-history-button"
+                        id="clearHistoryButton">
+                        Clear history
+                    </button>
+
+                </div>
+
+                <div
+                    class="history-list"
+                    id="historyList">
+
+                    <div class="empty-history">
+                        <div class="empty-history-icon">◌</div>
+                        <h4>No QR history yet</h4>
+                        <p>
+                            Generated links will appear here.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <div
+            class="toast-container"
+            id="toastContainer"
+            aria-live="polite"
+            aria-atomic="true">
+        </div>
+
+        <div
+            class="modal-backdrop"
+            id="confirmModal"
+            hidden>
+
+            <div
+                class="modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modalTitle">
+
+                <div class="modal-icon">!</div>
+
+                <h3 id="modalTitle">Clear history?</h3>
+
+                <p id="modalMessage">
+                    This will permanently remove your locally saved QR history.
+                </p>
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="secondary-action"
+                        id="cancelModalButton">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="danger-button"
+                        id="confirmModalButton">
+                        Clear history
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            class="modal-backdrop"
+            id="shareModal"
+            hidden>
+
+            <div
+                class="modal share-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="shareModalTitle">
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeShareModal"
+                    aria-label="Close">
+                    ×
+                </button>
+
+                <div class="modal-icon share-icon">↗</div>
+
+                <h3 id="shareModalTitle">Share QR</h3>
+
+                <p>
+                    Share the generated QR code using your device.
+                </p>
+
+                <div class="share-actions">
+
+                    <button
+                        type="button"
+                        class="share-option"
+                        id="shareNativeButton">
+                        <span>↗</span>
+                        <span>System share</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="share-option"
+                        id="copyLinkButton">
+                        <span>□</span>
+                        <span>Copy link</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer class="footer">
+
+            <div class="footer-brand">
+                <span class="footer-logo">L2Q</span>
+                <span>Link2QR</span>
+            </div>
+
+            <div class="footer-status">
+                <span class="status-dot"></span>
+                <span>Local processing</span>
+            </div>
+
+            <div class="footer-version">
+                v1.0
+            </div>
+
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
